@@ -674,9 +674,26 @@ a.card:hover .ph::before {
 }
 
 /* Car page gallery: air between the main shot, detail crops and the title */
-.car-gallery__main {
+.car-gallery__main.ph--tall {
   cursor: zoom-out;
   margin-top: var(--spacing-16);
+  /* Full-width cinematic letterbox instead of a towering 4:3 block */
+  aspect-ratio: auto;
+  height: clamp(320px, 42vw, 600px);
+}
+
+/* Vignette pulls amateur photography into the dark-showroom mood */
+.car-gallery__main.ph--tall::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 52%, rgba(0, 0, 0, 0.38) 100%);
+}
+
+.car-gallery__main img {
+  filter: saturate(0.8) contrast(1.1) brightness(0.95);
 }
 
 .car-gallery {
