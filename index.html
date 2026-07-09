@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uzcarsale — Chevrolet в Узбекистане</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23202020'/%3E%3Crect x='2' y='6' width='12' height='4' fill='%23ffc000'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav__inner">
+    <a class="nav__logo" href="index.html">UZCARSALE</a>
+    <nav class="nav__links">
+      <a href="index.html" class="active">Главная</a>
+      <a href="catalog.html">Каталог</a>
+      <a href="catalog.html?condition=new">Новые</a>
+      <a href="catalog.html?condition=used">С пробегом</a>
+    </nav>
+    <a class="nav__cta btn-outline" href="catalog.html">Найти авто</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <p class="hero__eyebrow">Платформа №1 в Узбекистане</p>
+      <h1 class="hero__title">Твой Chevrolet ждёт</h1>
+      <p class="hero__subtitle">Тысячи проверенных объявлений о продаже новых Chevrolet и автомобилей с пробегом по всей стране. Покупай напрямую у владельцев и дилеров — от Ташкента до Нукуса.</p>
+      <div class="hero__actions">
+        <a class="btn-giallo" href="catalog.html">Смотреть каталог</a>
+        <a class="btn-ghost" href="catalog.html">Продать авто</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Статистика -->
+  <section class="section section--dark">
+    <div class="container">
+      <div class="grid-4">
+        <div class="card">
+          <h3>12 000+</h3>
+          <p class="card__date">объявлений</p>
+        </div>
+        <div class="card">
+          <h3>9</h3>
+          <p class="card__date">регионов</p>
+        </div>
+        <div class="card">
+          <h3>5 000</h3>
+          <p class="card__date">сделок в месяц</p>
+        </div>
+        <div class="card">
+          <h3>100+</h3>
+          <p class="card__date">дилеров</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Модельный ряд -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Модельный ряд</h2>
+        <a class="btn-ghost" href="catalog.html">Все модели</a>
+      </div>
+      <div id="home-models" class="grid-4"></div>
+    </div>
+  </section>
+
+  <!-- Почему Uzcarsale -->
+  <section class="section section--dark">
+    <div class="container">
+      <div class="section-head">
+        <h2>Почему Uzcarsale</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <p class="card__date">01</p>
+          <h3 class="card__title">VIN-проверка истории</h3>
+          <p>Каждое объявление можно проверить по VIN: пробег, количество владельцев и участие в ДТП — до звонка продавцу.</p>
+        </div>
+        <div class="card">
+          <p class="card__date">02</p>
+          <h3 class="card__title">Безопасная сделка</h3>
+          <p>Сопровождаем оформление документов и перерегистрацию. Деньги передаются только после подписания договора.</p>
+        </div>
+        <div class="card">
+          <p class="card__date">03</p>
+          <h3 class="card__title">Прямой контакт с продавцом</h3>
+          <p>Никаких посредников и скрытых комиссий. Звоните владельцу или дилеру напрямую и договаривайтесь о цене сами.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Свежие объявления -->
+  <section class="section section--marble">
+    <div class="container">
+      <div class="section-head">
+        <h2>Свежие объявления</h2>
+        <a class="btn-ghost" href="catalog.html">Весь каталог</a>
+      </div>
+      <div id="home-listings" class="grid-3"></div>
+    </div>
+  </section>
+
+  <!-- Баннер: продай авто -->
+  <section class="section section--black">
+    <div class="container">
+      <h2>Продай своё авто за 5 минут</h2>
+      <p>Разместите объявление бесплатно: добавьте фото, укажите цену — и тысячи покупателей по всему Узбекистану увидят ваш Chevrolet уже сегодня.</p>
+      <a class="btn-outline" href="catalog.html">Разместить объявление</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__cols">
+      <div><h4>Uzcarsale</h4><p>Платформа №1 для покупки и продажи автомобилей Chevrolet в Узбекистане.</p></div>
+      <div><h4>Каталог</h4><a href="catalog.html?condition=new">Новые авто</a><a href="catalog.html?condition=used">С пробегом</a><a href="catalog.html">Все модели</a></div>
+      <div><h4>Сервисы</h4><a href="#">VIN-проверка</a><a href="#">Автокредит</a><a href="#">Страхование</a></div>
+      <div><h4>Контакты</h4><a href="#">Ташкент, Узбекистан</a><a href="#">+998 71 200-00-00</a><a href="#">info@uzcarsale.uz</a></div>
+    </div>
+    <div class="footer__bottom"><span>© 2026 Uzcarsale</span><span>Chevrolet — торговая марка General Motors</span></div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
