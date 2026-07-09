@@ -316,7 +316,12 @@ a:hover {
    -------------------------------------------------------------------------- */
 .hero {
   min-height: 100vh;
-  background: var(--surface-pure-black);
+  /* Photo sits under a heavy dark wash so white type and the single
+     giallo CTA keep full contrast; falls back to pure black if absent */
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0.82) 100%),
+    url("../images/hero.jpg") center 40% / cover no-repeat,
+    var(--surface-pure-black);
   color: var(--color-pearl-white);
   color-scheme: dark;
   display: flex;
@@ -654,6 +659,22 @@ a.card:hover .ph::before {
 /* Keep placeholder text above the light sweep */
 .ph > * {
   position: relative;
+}
+
+/* Real photo fills the tile; text label stays underneath as fallback */
+.ph img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  filter: saturate(0.85) contrast(1.05);
+}
+
+/* Light sweep reads as showroom glass above the photo */
+.ph::before {
+  z-index: 2;
 }
 
 .ph--tall {

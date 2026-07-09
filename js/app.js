@@ -96,9 +96,19 @@
   }
 
   // Плейсхолдер фото: .ph / .ph--tall с названием модели внутри
-  function makePh(label, tall) {
+  function makePh(label, tall, modelId, crop) {
     var ph = el('div', tall ? 'ph ph--tall' : 'ph');
     ph.appendChild(el('span', null, label));
+    if (modelId) {
+      var img = document.createElement('img');
+      img.src = 'images/' + encodeURIComponent(modelId) + '.jpg';
+      img.alt = label;
+      img.loading = 'lazy';
+      if (crop) img.style.objectPosition = crop;
+      // Нет файла — картинка убирается, остаётся текстовый плейсхолдер
+      img.onerror = function () { ph.removeChild(img); };
+      ph.appendChild(img);
+    }
     return ph;
   }
 
@@ -112,7 +122,7 @@
     var card = el('a', 'listing-card');
     card.href = 'car.html?id=' + encodeURIComponent(listing.id);
 
-    card.appendChild(makePh(modelNameOf(listing), false));
+    card.appendChild(makePh(modelNameOf(listing), false, listing.modelId));
 
     var badges = el('div', 'listing-card__badges');
     if (listing.premium) {
@@ -156,7 +166,7 @@
       var card = el('a', 'card');
       card.href = 'catalog.html?model=' + encodeURIComponent(model.id);
 
-      card.appendChild(makePh(model.name, false));
+      card.appendChild(makePh(model.name, false, model.id));
       card.appendChild(el('h3', 'card__title', model.name));
       card.appendChild(el('p', 'card__date', model.tagline));
       card.appendChild(el('div', 'listing-card__price',
@@ -353,10 +363,12 @@
     page.appendChild(crumb);
 
     // Псевдо-галерея
-    page.appendChild(makePh(modelName, true));
+    page.appendChild(makePh(modelName, true, listing.modelId));
     var thumbs = el('div', 'grid-3');
+    // Одно фото с разным кадрированием — псевдо-галерея
+    var crops = ['left center', 'center', 'right center'];
     for (var t = 0; t < 3; t++) {
-      thumbs.appendChild(makePh(modelName, false));
+      thumbs.appendChild(makePh(modelName, false, listing.modelId, crops[t]));
     }
     page.appendChild(thumbs);
 
