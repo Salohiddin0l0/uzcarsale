@@ -129,6 +129,33 @@ window.UZ_HELPERS = {
 };
 ```
 
+## Бэкенд (фаза 2) — API-контракт
+
+Сервер: Node.js + Express, порт 3000, `npm start`. Раздаёт статику из корня репозитория,
+API под `/api`. Хранение: `server/data/listings.json` (в .gitignore), при первом запуске
+автоматически сидируется из `js/data.js` (подключать через шим: `global.window = {}; require(...)`).
+
+Эндпоинты (формы объектов — ровно как UZ_MODELS / UZ_LISTINGS выше):
+- `GET /api/models` → массив моделей
+- `GET /api/listings` → массив ВСЕХ объявлений (фильтрация остаётся на клиенте)
+- `GET /api/listings/:id` → объявление или 404 `{error}`
+- `POST /api/listings` (JSON body: modelId, title, year, priceUSD, mileageKm, condition,
+  region, transmission, fuel, color, sellerType, description; phone опционально) →
+  сервер валидирует обязательные поля (400 при ошибке), сам вычисляет: id (max+1),
+  priceUZS (priceUSD × 12600, округление до 100 000), posted (сегодня, YYYY-MM-DD),
+  vinChecked: false, premium: false, specs из полей модели. Ответ 201 с созданным объектом.
+
+Фронтенд-правило (fallback ОБЯЗАТЕЛЕН): app.js при старте пробует `fetch('/api/listings')`
+и `fetch('/api/models')`; если оба ок — работает с данными API, если нет (статический
+хостинг GitHub Pages) — молча использует window.UZ_LISTINGS / window.UZ_MODELS из data.js.
+Сайт должен полностью работать в обоих режимах.
+
+Страница `sell.html`: форма «Продать авто» (модель — селект из моделей, название, год,
+цена $, пробег, состояние, регион, КПП, топливо, цвет, тип продавца, описание, телефон),
+POST на `/api/listings`; при успехе — redirect на `car.html?id=N`; при недоступном API —
+сообщение «Размещение работает при запущенном сервере (npm start)». Кнопки «Продать авто»
+(hero) и «Разместить объявление» (баннер) ведут на sell.html.
+
 ## app.js (агент catalog)
 - `catalog.html`: контейнер `#catalog-grid`, фильтры `#filters` (модель, состояние, регион, КПП, цена от/до, сортировка). Читает query-параметры (`condition`, `model`). Рендер карточек: `.listing-card` внутри `.grid-3`; карточка = ссылка на `car.html?id=N`; внутри `.ph` с названием модели, бейджи (PREMIUM — `.badge--giallo`, VIN ✓, регион), title, `.listing-card__price` ($ + сум), meta (год · пробег · КПП).
 - `car.html`: по `?id=` рендерит в `#car-root`: хлебная крошка, `.ph--tall` галерея-плейсхолдер, заголовок, цена, `.spec-table`, описание, блок продавца с кнопкой `.btn-giallo` «Показать номер» (по клику подставляет телефон), блок «Похожие объявления» (та же модель, 3 шт).

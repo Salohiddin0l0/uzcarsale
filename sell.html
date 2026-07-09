@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Продать авто — Uzcarsale</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23202020'/%3E%3Crect x='2' y='6' width='12' height='4' fill='%23ffc000'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body style="padding-top: 64px;">
+
+<header class="nav">
+  <div class="container nav__inner">
+    <a class="nav__logo" href="index.html">UZCARSALE</a>
+    <nav class="nav__links">
+      <a href="index.html">Главная</a>
+      <a href="catalog.html">Каталог</a>
+      <a href="catalog.html?condition=new">Новые</a>
+      <a href="catalog.html?condition=used">С пробегом</a>
+    </nav>
+    <a class="nav__cta btn-outline" href="catalog.html">Найти авто</a>
+  </div>
+</header>
+
+<main>
+  <section class="section section--dark" style="padding: 48px 0;">
+    <div class="container">
+      <h1>Продать авто</h1>
+      <p>Заполните форму — объявление появится в каталоге</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <form id="sell-form">
+        <div class="grid-3">
+          <div class="field">
+            <label for="sell-model">Модель</label>
+            <select id="sell-model" name="modelId" required>
+              <option value="">Выберите модель</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sell-title">Название объявления</label>
+            <input id="sell-title" name="title" type="text" placeholder="Например: Cobalt 4-позиция" required>
+          </div>
+          <div class="field">
+            <label for="sell-year">Год выпуска</label>
+            <input id="sell-year" name="year" type="number" min="1990" max="2027" step="1" required>
+          </div>
+          <div class="field">
+            <label for="sell-price">Цена, $</label>
+            <input id="sell-price" name="priceUSD" type="number" min="1" step="1" required>
+          </div>
+          <div class="field">
+            <label for="sell-mileage">Пробег, км</label>
+            <input id="sell-mileage" name="mileageKm" type="number" min="0" step="1" placeholder="0 для нового" required>
+          </div>
+          <div class="field">
+            <label for="sell-condition">Состояние</label>
+            <select id="sell-condition" name="condition" required>
+              <option value="">Выберите</option>
+              <option value="new">Новый</option>
+              <option value="used">С пробегом</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sell-region">Регион</label>
+            <select id="sell-region" name="region" required>
+              <option value="">Выберите регион</option>
+              <option value="Ташкент">Ташкент</option>
+              <option value="Самарканд">Самарканд</option>
+              <option value="Бухара">Бухара</option>
+              <option value="Фергана">Фергана</option>
+              <option value="Андижан">Андижан</option>
+              <option value="Наманган">Наманган</option>
+              <option value="Нукус">Нукус</option>
+              <option value="Карши">Карши</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sell-transmission">Коробка передач</label>
+            <select id="sell-transmission" name="transmission" required>
+              <option value="">Выберите</option>
+              <option value="Автомат">Автомат</option>
+              <option value="Механика">Механика</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sell-fuel">Топливо</label>
+            <select id="sell-fuel" name="fuel" required>
+              <option value="">Выберите</option>
+              <option value="Бензин">Бензин</option>
+              <option value="Бензин/газ">Бензин/газ</option>
+              <option value="Дизель">Дизель</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sell-color">Цвет</label>
+            <input id="sell-color" name="color" type="text" placeholder="Например: Белый" required>
+          </div>
+          <div class="field">
+            <label for="sell-seller">Тип продавца</label>
+            <select id="sell-seller" name="sellerType" required>
+              <option value="">Выберите</option>
+              <option value="Частное лицо">Частное лицо</option>
+              <option value="Дилер">Дилер</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sell-phone">Телефон</label>
+            <input id="sell-phone" name="phone" type="tel" placeholder="+998 ..." required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="sell-description">Описание</label>
+          <textarea id="sell-description" name="description" rows="5" placeholder="Состояние, комплектация, история обслуживания" required></textarea>
+        </div>
+        <p id="sell-error"></p>
+        <button type="submit" class="btn-giallo">Опубликовать объявление</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__cols">
+      <div><h4>Uzcarsale</h4><p>Платформа №1 для покупки и продажи автомобилей Chevrolet в Узбекистане.</p></div>
+      <div><h4>Каталог</h4><a href="catalog.html?condition=new">Новые авто</a><a href="catalog.html?condition=used">С пробегом</a><a href="catalog.html">Все модели</a></div>
+      <div><h4>Сервисы</h4><a href="#">VIN-проверка</a><a href="#">Автокредит</a><a href="#">Страхование</a></div>
+      <div><h4>Контакты</h4><a href="#">Ташкент, Узбекистан</a><a href="#">+998 71 200-00-00</a><a href="#">info@uzcarsale.uz</a></div>
+    </div>
+    <div class="footer__bottom"><span>© 2026 Uzcarsale</span><span>Chevrolet — торговая марка General Motors</span></div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

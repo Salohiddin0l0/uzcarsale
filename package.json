@@ -1,0 +1,12 @@
+{
+  "name": "uzcarsale",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Uzcarsale — объявления Chevrolet в Узбекистане (статика + API)",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "express": "^4"
+  }
+}

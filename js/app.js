@@ -1,18 +1,63 @@
 /* Uzcarsale — app.js
-   Рендер каталога, карточки объявления и блоков главной страницы.
-   Vanilla JS, без внешних библиотек. Данные: js/data.js (window.UZ_MODELS,
-   window.UZ_LISTINGS, window.UZ_HELPERS). Все значения из данных вставляются
+   Рендер каталога, карточки объявления, блоков главной страницы и формы
+   «Продать авто». Vanilla JS, без внешних библиотек.
+   Данные: сначала пробуем API (api/models, api/listings); если сервер
+   недоступен (статический хостинг) — молча берём window.UZ_MODELS /
+   window.UZ_LISTINGS из js/data.js. Все значения из данных вставляются
    через textContent — никакого сырого HTML. */
 (function () {
   'use strict';
 
-  var MODELS = window.UZ_MODELS || [];
-  var LISTINGS = window.UZ_LISTINGS || [];
+  var MODELS = [];
+  var LISTINGS = [];
   var H = window.UZ_HELPERS || {
     fmtUZS: function (n) { return n.toLocaleString('ru-RU') + ' сум'; },
     fmtUSD: function (n) { return '$' + n.toLocaleString('en-US'); },
     fmtKm: function (n) { return n === 0 ? 'Новый' : n.toLocaleString('ru-RU') + ' км'; }
   };
+
+  /* ---------- Загрузка данных: API с fallback на js/data.js ---------- */
+
+  var API_TIMEOUT_MS = 1500;
+
+  function fetchJson(url, signal) {
+    return fetch(url, { signal: signal }).then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    });
+  }
+
+  // Возвращает Promise<{models, listings}>. Пробует API (относительные пути,
+  // таймаут ~1.5 c через AbortController); при любой ошибке молча отдаёт
+  // статические данные из data.js (максимум один console.info, без ошибок).
+  function loadData() {
+    var fallback = {
+      models: window.UZ_MODELS || [],
+      listings: window.UZ_LISTINGS || []
+    };
+
+    if (typeof window.fetch !== 'function' || typeof window.AbortController !== 'function') {
+      return Promise.resolve(fallback);
+    }
+
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, API_TIMEOUT_MS);
+
+    return Promise.all([
+      fetchJson('api/models', controller.signal),
+      fetchJson('api/listings', controller.signal)
+    ]).then(function (results) {
+      clearTimeout(timer);
+      if (!Array.isArray(results[0]) || !Array.isArray(results[1])) {
+        return fallback;
+      }
+      return { models: results[0], listings: results[1] };
+    }).catch(function () {
+      clearTimeout(timer);
+      console.info('Uzcarsale: API недоступен, используются данные из js/data.js');
+      return fallback;
+    });
+  }
 
   /* ---------- Общие хелперы ---------- */
 
@@ -409,13 +454,93 @@
     }
   }
 
+  /* ---------- Страница «Продать авто» (sell.html) ---------- */
+
+  function initSellPage() {
+    var form = document.getElementById('sell-form');
+    if (!form) return;
+
+    var modelSelect = document.getElementById('sell-model');
+    if (modelSelect) {
+      MODELS.forEach(function (model) {
+        var opt = document.createElement('option');
+        opt.value = model.id;
+        opt.textContent = model.name;
+        modelSelect.appendChild(opt);
+      });
+    }
+
+    var errorNode = document.getElementById('sell-error');
+    function showError(text) {
+      if (errorNode) errorNode.textContent = text;
+    }
+
+    var submitting = false;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (submitting) return;
+      showError('');
+
+      function val(name) {
+        var field = form.elements.namedItem(name);
+        return field ? String(field.value).trim() : '';
+      }
+
+      var payload = {
+        modelId: val('modelId'),
+        title: val('title'),
+        year: parseInt(val('year'), 10),
+        priceUSD: parseInt(val('priceUSD'), 10),
+        mileageKm: parseInt(val('mileageKm'), 10) || 0,
+        condition: val('condition'),
+        region: val('region'),
+        transmission: val('transmission'),
+        fuel: val('fuel'),
+        color: val('color'),
+        sellerType: val('sellerType'),
+        description: val('description')
+      };
+      var phone = val('phone');
+      if (phone) payload.phone = phone;
+
+      submitting = true;
+
+      fetch('api/listings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (body) {
+          if (res.status === 201 && body && body.id !== undefined) {
+            window.location.href = 'car.html?id=' + encodeURIComponent(body.id);
+            return;
+          }
+          submitting = false;
+          // API всегда шлёт {error} при неудаче; его отсутствие значит, что бэкенда нет (статический хостинг)
+          showError(body && body.error
+            ? String(body.error)
+            : 'Размещение объявлений работает при запущенном сервере: npm install && npm start');
+        });
+      }).catch(function () {
+        submitting = false;
+        showError('Размещение объявлений работает при запущенном сервере: npm install && npm start');
+      });
+    });
+  }
+
   /* ---------- Инициализация ---------- */
 
   function init() {
-    initHomeModels();
-    initHomeListings();
-    initCatalog();
-    initCarPage();
+    loadData().then(function (data) {
+      MODELS = data.models;
+      LISTINGS = data.listings;
+      initHomeModels();
+      initHomeListings();
+      initCatalog();
+      initCarPage();
+      initSellPage();
+    });
   }
 
   if (document.readyState === 'loading') {
