@@ -670,6 +670,26 @@ a.card:hover .ph::before {
   object-fit: cover;
   z-index: 1;
   filter: saturate(0.85) contrast(1.05);
+  transition: transform 0.5s ease, object-position 0.5s ease;
+}
+
+/* Car page gallery: air between the main shot, detail crops and the title */
+.car-gallery__main {
+  cursor: zoom-out;
+  margin-top: var(--spacing-16);
+}
+
+.car-gallery {
+  margin-top: var(--element-gap);
+  margin-bottom: var(--spacing-48);
+}
+
+.car-gallery .ph {
+  cursor: pointer;
+}
+
+.car-gallery .ph:hover img {
+  filter: saturate(1) contrast(1.05);
 }
 
 /* Light sweep reads as showroom glass above the photo */

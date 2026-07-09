@@ -362,14 +362,38 @@
     crumb.appendChild(document.createTextNode(' / ' + listing.title));
     page.appendChild(crumb);
 
-    // Псевдо-галерея
-    page.appendChild(makePh(modelName, true, listing.modelId));
-    var thumbs = el('div', 'grid-3');
-    // Одно фото с разным кадрированием — псевдо-галерея
-    var crops = ['left center', 'center', 'right center'];
-    for (var t = 0; t < 3; t++) {
-      thumbs.appendChild(makePh(modelName, false, listing.modelId, crops[t]));
+    // Галерея: общий план + три «деталь-кадра» (зум разных частей того же фото).
+    // Клик по миниатюре переносит её ракурс на главное фото, клик по главному — сброс.
+    var mainPh = makePh(modelName, true, listing.modelId);
+    mainPh.classList.add('car-gallery__main');
+    page.appendChild(mainPh);
+
+    function applyCrop(ph, crop) {
+      var img = ph.querySelector('img');
+      if (!img) return;
+      if (crop) {
+        img.style.transformOrigin = crop.pos;
+        img.style.transform = 'scale(' + crop.zoom + ')';
+        img.style.objectPosition = crop.pos;
+      } else {
+        img.style.transform = '';
+        img.style.objectPosition = '';
+      }
     }
+
+    var thumbs = el('div', 'grid-3 car-gallery');
+    var crops = [
+      { pos: 'left center', zoom: 1.6 },
+      { pos: 'center bottom', zoom: 1.9 },
+      { pos: 'right center', zoom: 1.6 }
+    ];
+    crops.forEach(function (crop) {
+      var thumb = makePh(modelName, false, listing.modelId);
+      applyCrop(thumb, crop);
+      thumb.addEventListener('click', function () { applyCrop(mainPh, crop); });
+      thumbs.appendChild(thumb);
+    });
+    mainPh.addEventListener('click', function () { applyCrop(mainPh, null); });
     page.appendChild(thumbs);
 
     // Заголовок и бейджи
